@@ -4,10 +4,31 @@
              x:Class="Pathfinder_1e_Assistant.MainPage">
 
     <ScrollView>
+        
         <VerticalStackLayout
             Padding="30,0"
             Spacing="25">
+            <Label 
+                Text="Show critical hit/miss cards?"
+            />
+            <CheckBox
+                x:Name="CritCardsToggle"
+                IsChecked="True"
+            />
+            <Button
+                x:Name="CritHitBtn"
+                Text="Critical Hit!"
+                HorizontalOptions="Fill"
+                Clicked="OnCritHitClicked"
+            />
+            <Button
+                x:Name="CritMissBtn"
+                Text="Critical Miss!"
+                HorizontalOptions="Fill"
+                Clicked="OnCritMissClicked"
+            />
             <Image
+                x:Name="DisplayImg"
                 Source="dotnet_bot.png"
                 HeightRequest="185"
                 Aspect="AspectFit"
