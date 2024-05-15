@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             Color="Black"
+             x:Class="Pathfinder_1e_Assistant.PopupCharacterAdd"
+             Size="280,275"
+             >
+
+    <VerticalStackLayout Padding="10" Margin="2" Spacing="10">
+        <Label Text="Enter the character's name:" />
+
+        <Entry x:Name="newPerson"
+               Placeholder="Bing-bong the Archer"
+               HorizontalOptions="Fill"/>
+        <Label x:Name="statusMessage"
+               LineBreakMode="WordWrap"
+               Text=""
+               VerticalOptions="End" 
+               HorizontalOptions="Center" 
+               TextColor="White"/>
+        
+        <Button Text="Add Person"
+                Clicked="OnAddButtonClicked" />
+        <Button Text="Cancel"
+                Clicked="OnCancelButtonClicked" />
+        
+    </VerticalStackLayout>
+</toolkit:Popup>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Pathfinder_1e_Assistant.MacroDetailsPage"
+             Title=""
+             >
+    <VerticalStackLayout Spacing="10">
+        <Label 
+            Text="Name:"
+            VerticalOptions="Center" 
+            HorizontalOptions="Start" 
+        />
+        <Entry x:Name="MacroName" 
+               Placeholder="Macro"
+               IsTextPredictionEnabled="false"
+        />
+        
+        <Label
+            Text="Macro:"
+            VerticalOptions="Center" 
+            HorizontalOptions="Start" 
+        />
+        <Editor
+            x:Name="MacroDetails"
+            AutoSize="TextChanges"
+            IsTextPredictionEnabled="false"
+            Placeholder="Attack 1: &#10;[[2d4 + 1]] fire damage"
+            
+        />
+
+        <HorizontalStackLayout Spacing="20">
+            <Button
+                x:Name="editMacroAccepted"
+                Text="Accept Changes"
+                Clicked="OnAcceptChangesClicked"
+            />
+            <Button
+                x:Name="editMacroDeleted"
+                Text="Delete Macro"
+                Clicked="OnDeleteMacroClicked"
+            />
+            <Button
+                Text="Cancel"
+                Clicked="OnCancelButtonClicked"
+            />
+            
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
+</ContentPage>

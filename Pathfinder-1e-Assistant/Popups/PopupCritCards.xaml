@@ -3,20 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              Color="Black"
-             x:Class="Pathfinder_1e_Assistant.PopupCrits"
-             Size="280,450"
+             x:Class="Pathfinder_1e_Assistant.Popups.PopupCrits"
+             Size="300,400"
              >
-             
+
     <VerticalStackLayout >
- 
         <Image
             x:Name="CritCardImage"
             Source="pf_hit_1_cc.jpg"
-            Aspect="AspectFill"/>
-        <Label
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="End" 
-            HorizontalOptions="Center" 
-            TextColor="White"/>
+            Aspect="AspectFit"
+        />
     </VerticalStackLayout>
 </toolkit:Popup>

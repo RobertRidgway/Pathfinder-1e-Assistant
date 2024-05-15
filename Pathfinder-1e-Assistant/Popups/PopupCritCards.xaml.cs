@@ -1,6 +1,6 @@
 using CommunityToolkit.Maui.Views;
 
-namespace Pathfinder_1e_Assistant;
+namespace Pathfinder_1e_Assistant.Popups;
  
 public partial class PopupCrits : Popup
 {
