@@ -13,7 +13,7 @@ namespace Pathfinder_1e_Assistant
 {
     public class MacroRepo(string dbPath)
     {
-        readonly string _dbPath = dbPath;
+        readonly private string _dbPath = dbPath;
 
         public string StatusMessage { get; set; } = string.Empty;
 
@@ -61,7 +61,7 @@ namespace Pathfinder_1e_Assistant
             catch (Exception ex)
             {
                 StatusMessage = $"Failed to add {MacroName}. Error: {ex.Message}";
-                Debug.WriteLine(StatusMessage);
+                //Debug.WriteLine(StatusMessage);
             }
 
         }

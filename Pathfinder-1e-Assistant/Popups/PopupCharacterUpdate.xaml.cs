@@ -36,7 +36,7 @@ public partial class PopupCharacterUpdate : Popup
 
 	async void OnDeleteButtonClicked(object sender, EventArgs args)
 	{
-		bool answer = await App.Current.MainPage.DisplayAlert("Confirmation","Are you sure you want to delete this character?", "Yes", "No");
+		bool answer = await Shell.Current.DisplayAlert("Confirmation","Are you sure you want to delete this character?", "Yes", "No");
 
 		bool updateToken = false;
 		if (answer) 

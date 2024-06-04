@@ -122,6 +122,9 @@
 	  <Compile Update="Popups\PopupCharacterAdd.xaml.cs">
 	    <DependentUpon>PopupCharacterAdd.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Popups\PopupMacro.xaml.cs">
+	    <DependentUpon>PopupMacro.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Popups\PopupCritCards.xaml.cs">
 	    <DependentUpon>PopupCritCards.xaml</DependentUpon>
 	  </Compile>
@@ -144,6 +147,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Popups\PopupCharacterAdd.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Popups\PopupMacro.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Popups\PopupCritCards.xaml">

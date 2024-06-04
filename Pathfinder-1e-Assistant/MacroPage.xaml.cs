@@ -11,9 +11,11 @@ namespace Pathfinder_1e_Assistant
 {
     public partial class MacroPage : ContentPage
     {
-        private readonly Random rnd = new();
 
         public MacroRepo macroRepo = new(DatabaseConstants.MacrosRepoPath);
+
+        public string StatusMessage { get; set; } = string.Empty;
+
         public MacroPage()
         {
             InitializeComponent();
@@ -76,13 +78,25 @@ namespace Pathfinder_1e_Assistant
             }
         }
 
-        private void OnMacroButtonClicked(object? sender, EventArgs e) 
+        private async void OnMacroButtonClicked(object sender, EventArgs e) 
         {
-            const string funcName = "OnMacroButtonClicked";
-            if (sender is null) { throw new Exception($"Null passed to {funcName}"); }
-            var obj = sender as Button;
-            Debug.Assert(obj is not null);
-            macroClick.Text = obj.StyleId;
+            var obj = (Button)sender;
+            int macroId = Convert.ToInt32(obj.StyleId);
+            Macro macro = macroRepo.GetMacro(macroId);
+            try
+            {
+                (string[] macroSnippets, int[] critFlags) = DiceParse.MacroParse(macro.MacroText);
+                this.ShowPopup(new PopupMacro(macroSnippets, critFlags));
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Error: {ex.Message}";
+                await DisplayAlert("Error", StatusMessage,"Ok");
+            }
+
+            
+
+            
         }
 
         private async void OnAddMacroButtonClicked(object sender, EventArgs e)
@@ -105,7 +119,7 @@ namespace Pathfinder_1e_Assistant
         private void OnCritCardClicked(object sender, EventArgs e)
         {
             string cardURL;
-            int cardNum = rnd.Next(1, 52 + 1);
+            int cardNum = Util.GetRandomInt(1, 52 + 1);
             var obj = (Button)sender;
             bool cardType = (obj.Text == "Critical Hit!");
             if (cardType) { cardURL = $"pf_hit_{cardNum}_cc.jpg"; }

@@ -6,7 +6,7 @@ namespace Pathfinder_1e_Assistant;
 
 public partial class NewMacroPage : ContentPage
 {
-    MacroRepo _macroRepo;
+    readonly MacroRepo _macroRepo;
 	public NewMacroPage(MacroRepo macroRepo)
 	{
 		InitializeComponent();

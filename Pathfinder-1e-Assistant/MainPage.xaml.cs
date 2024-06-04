@@ -35,7 +35,7 @@ namespace Pathfinder_1e_Assistant
                 Button editBtn = new() { Text = StyleConstants.settingStr, StyleId = charId };
 
                 charBtn.Clicked += (s, e) => { OnCharacterClicked(s, e); };
-                editBtn.Clicked += (s,e) => { OnEditCharacterClicked(s, e); };
+                editBtn.Clicked += (s, e) => { OnEditCharacterClicked(s, e); };
                 Grid.SetRow(charBtn, rowPos);
                 Grid.SetRow(editBtn, rowPos);
 
