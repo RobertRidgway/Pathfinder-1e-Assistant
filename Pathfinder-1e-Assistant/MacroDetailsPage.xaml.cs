@@ -21,7 +21,7 @@ public partial class MacroDetailsPage : ContentPage
 
 	private async void OnAcceptChangesClicked(object sender, EventArgs e)
 	{
-        _macroRepo.UpdateMacro(new Macro { Id = _macro.Id, CharName =_macro.CharName, Name=MacroName.Text, MacroText = MacroDetails.Text});
+        _macroRepo.UpdateMacro(new Macro { Id = _macro.Id, CharId = _macro.CharId, Name=MacroName.Text, MacroText = MacroDetails.Text});
         
         await Navigation.PopModalAsync();
     }

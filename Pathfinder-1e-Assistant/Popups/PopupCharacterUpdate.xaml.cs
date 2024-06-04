@@ -25,7 +25,7 @@ public partial class PopupCharacterUpdate : Popup
 
 		statusMessage.Text = App.CharRepo.StatusMessage;
 		Debug.WriteLine(statusMessage.Text);
-        Thread.Sleep(1000);
+       
 		// Close popup if character updated.
 		if (statusMessage.Text.StartsWith("Character updated:"))
 		{
@@ -46,10 +46,9 @@ public partial class PopupCharacterUpdate : Popup
 
 			// Delete all macros
 			MacroRepo macroRepo = new(DatabaseConstants.MacrosRepoPath);
-			List<Macro> macroList = macroRepo.GetCharMacros(character.CharacterName);
+			List<Macro> macroList = macroRepo.GetCharMacros(character.Id);
 			foreach (Macro macro in macroList) 
 			{
-				Debug.WriteLine($"{macro.CharName} {macro.Name}");
 				macroRepo.DeleteMacro(macro); }
 			updateToken= true;
 

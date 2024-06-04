@@ -9,8 +9,8 @@ namespace Pathfinder_1e_Assistant.Databases
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
 
-        [MaxLength(200)]
-        public string CharName { get; set; } = string.Empty;
+
+        public int CharId { get; set; }
 
         [MaxLength(200)]
         public string Name { get; set; } = string.Empty;

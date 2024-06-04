@@ -35,10 +35,10 @@ namespace Pathfinder_1e_Assistant
             return result;
         }
 
-        public List<Macro> GetCharMacros(string charName)
+        public List<Macro> GetCharMacros(int charId)
         {
             Init();
-            List<Macro> result = [.. conn.Table<Macro>().Where(i => i.CharName == charName)];
+            List<Macro> result = [.. conn.Table<Macro>().Where(i => i.CharId == charId)];
             return result;
         }
 
@@ -50,12 +50,12 @@ namespace Pathfinder_1e_Assistant
         }
 
 
-        public void AddNewMacro(string charName, string MacroName, string MacroText)
+        public void AddNewMacro(int charId, string MacroName, string MacroText)
         {
             try
             {
                 Init();
-                conn.Insert(new Macro { CharName=charName, Name = MacroName, MacroText = MacroText });
+                conn.Insert(new Macro { CharId=charId, Name = MacroName, MacroText = MacroText });
                 StatusMessage = $"Macro added: {MacroName}";
             }
             catch (Exception ex)

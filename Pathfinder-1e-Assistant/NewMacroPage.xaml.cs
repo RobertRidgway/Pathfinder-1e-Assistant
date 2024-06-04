@@ -17,7 +17,7 @@ public partial class NewMacroPage : ContentPage
 
 	private async void OnAddMacroClicked(object sender, EventArgs e)
 	{
-        _macroRepo.AddNewMacro(CharacterGlobals.LoadedCharacter.CharacterName, NewMacroName.Text, NewMacroDetails.Text);
+        _macroRepo.AddNewMacro(CharacterGlobals.LoadedCharacter.Id, NewMacroName.Text, NewMacroDetails.Text);
         
         await Navigation.PopModalAsync();
     }

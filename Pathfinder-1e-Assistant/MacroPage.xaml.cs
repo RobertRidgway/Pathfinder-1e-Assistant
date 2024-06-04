@@ -37,7 +37,7 @@ namespace Pathfinder_1e_Assistant
         private void UpdateMacroList() 
         {
 
-            List<Macro> macroList = macroRepo.GetCharMacros(CharacterGlobals.LoadedCharacter.CharacterName);
+            List<Macro> macroList = macroRepo.GetCharMacros(CharacterGlobals.LoadedCharacter.Id);
 
             int rowPos = 0;
             int colPos = 0;
