@@ -15,7 +15,7 @@
                HorizontalOptions="Fill"/>
         <Label x:Name="statusMessage"
                LineBreakMode="WordWrap"
-               Text="iuhuhiuh"
+               Text=""
                VerticalOptions="End" 
                HorizontalOptions="Center" 
                TextColor="White"/>

@@ -3,51 +3,50 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Pathfinder_1e_Assistant.MacroPage">
 
-    <ScrollView>
-        
-        <Grid RowDefinitions="Auto,Auto,*,Auto"
-            Padding="30,0" >
-            <HorizontalStackLayout Grid.Row="0">
-                <Label 
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto" Padding="0,0" Margin="10" RowSpacing="10" >
+        <HorizontalStackLayout Grid.Row="0">
+            <Label 
                     Text="Show critical hit/miss cards?"
                     VerticalOptions="Center"
                 />
-                <CheckBox
+            <CheckBox
                     x:Name="CritCardsToggle"
                     IsChecked="True"
                     VerticalOptions="Center"
                 />
-            </HorizontalStackLayout>
-            <HorizontalStackLayout Grid.Row="1" Spacing="25">
-                <Button
+        </HorizontalStackLayout>
+        <HorizontalStackLayout Grid.Row="1" Spacing="25">
+            <Button
                     x:Name="CritHitBtn"
                     Text="Critical Hit!"
                     HorizontalOptions="Fill"
                     Clicked="OnCritCardClicked"/>
-                <Button
+            <Button
                     x:Name="CritMissBtn"
                     Text="Critical Miss!"
                     HorizontalOptions="Fill"
                     Clicked="OnCritCardClicked"/>
-            </HorizontalStackLayout>
-            <Grid Grid.Row = "2"
+        </HorizontalStackLayout>
+        <ScrollView Grid.Row = "2">
+            <Grid 
                   x:Name="MacroGrid"
                   ColumnSpacing="1"
                   Padding="2"
                   ColumnDefinitions="Auto,Auto,*,Auto,Auto">
-                
-                
+
+
             </Grid>
-            <HorizontalStackLayout Grid.Row="3">
-                <Button x:Name="AddNewMacro"
+        </ScrollView>
+        <HorizontalStackLayout Grid.Row="3">
+            <Button x:Name="AddNewMacro"
                     Text="Add new macro"
                     HorizontalOptions="Start"
                     Clicked="OnAddMacroButtonClicked"/>
 
-                <Label x:Name="macroClick" />
-            </HorizontalStackLayout>
+            <Label x:Name="macroClick" />
+        </HorizontalStackLayout>
 
-        </Grid>
-    </ScrollView>
+    </Grid>
 
 </ContentPage>

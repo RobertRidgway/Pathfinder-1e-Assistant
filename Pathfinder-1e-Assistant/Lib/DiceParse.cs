@@ -128,12 +128,12 @@ namespace Pathfinder_1e_Assistant.Lib
         {
             List<string> stringList = [];
             List<int> rollFlags = [];
-
+            const int nonroll = 2;
             int[][] bracketIdxs = BracketSearch(macro);
 
             if (bracketIdxs.Length == 0)
             {
-                return (new string[] { macro }, new int[] { 0 });
+                return (new string[] { macro }, new int[] { nonroll });
             }
 
             stringList.Add(macro[0..bracketIdxs[0][0]]);

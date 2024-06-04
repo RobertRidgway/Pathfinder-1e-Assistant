@@ -5,10 +5,10 @@
 
     <Grid Margin="30"
           RowDefinitions="Auto,*,Auto">
-        <Label Text="Select a character." Grid.Row="0"/>
+        <Label Text="Select a character:" Grid.Row="0" HorizontalOptions="Start"/>
         <ScrollView x:Name="CharacterView" Grid.Row="1" Margin="3">
             
-            <Grid Padding="2" ColumnSpacing="5" RowSpacing="2"
+            <Grid Padding="4" ColumnSpacing="5" RowSpacing="2"
                 x:Name="CharacterGrid"
                 ColumnDefinitions="*,Auto" >
                 
