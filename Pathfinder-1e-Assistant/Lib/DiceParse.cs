@@ -5,11 +5,23 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Pathfinder_1e_Assistant.Lib
 {
     public partial class DiceParse
     {
+
+        readonly static string[] delimitersAS = ["+", "-"];
+        readonly static string[] delimitersMD = ["*", "/", "%"];
+        readonly static string[] rollDelimiters = ["d", "cs>"];
+
+        //readonly static string joinedAS = String.Join("",delimitersAS);
+        readonly static string joinedMD = String.Join("", delimitersMD);
+
+        const int nonRoll = 2;
+
+
         public static string ReplaceFirst(string text, string search, string replace)
         {
             int pos = text.IndexOf(search);
@@ -69,7 +81,7 @@ namespace Pathfinder_1e_Assistant.Lib
 
         // Take [[ XXdYY + ZZZ ]] and return a string with replaced text
         // Along with critcal hit/fail flags for formatting purposes
-        public static (string, int) RollParse(string rollString)
+        public static (string, int) RollParse(string rollString, bool computeTerm)
         {
             // 1 is a crit, -1 is a crit fail
             int globalCritFlag = 0;
@@ -77,49 +89,99 @@ namespace Pathfinder_1e_Assistant.Lib
 
             string modString = rollString.ToLower();
             // [GeneratedRegex("[^(cs>)0-9d+-]")]
-            modString = RegexDiceParse().Replace(modString, "");
+            
 
-            string[] stringDelimiters = [ "+", "-" ];
-            string[] rollDelimiters = [ "d", "cs>" ];
+            
 
-            var addsOrSubs = modString.Split(stringDelimiters, StringSplitOptions.None);
-            //Console.WriteLine(addsOrSubs);
+            MatchCollection matches = RegexBrackets().Matches(modString);
 
-            foreach (string term in addsOrSubs)
+            foreach (Match match in matches)
             {
+                string term = match.Value;
+                (string interimStr, int interimCritFlag) = RollParse(term[1..^1], true);
+                if (interimCritFlag == 1) { globalCritFlag = 1; }
+                //Debug.WriteLine($"Replacing {outString} : {modString} = {term} - {interimStr}");
+                outString = ReplaceFirst(outString, term, interimStr);
+                modString = ReplaceFirst(modString, term, interimStr);
+                //Debug.WriteLine($"Replaced {outString} : {modString} = {term} - {interimStr}");
+            }
+            
 
-                // Splits into XX d YY cs> ZZ
-                // Length of 1 means constant, length of 2 means dice roll, length of 3 means diceroll with crit range
-                string[] d = term.Split(rollDelimiters, StringSplitOptions.None);
-                if (d.Length > 1)
+            modString = RegexDiceParse().Replace(modString, "");
+            string[] addsOrSubs = modString.Split(delimitersAS, StringSplitOptions.RemoveEmptyEntries);
+            if (addsOrSubs.Length > 1)
+            {
+                // Trim / * from end of terms
+                for (int i = 0; i < addsOrSubs.Length; i++)
                 {
-                    if (!int.TryParse(d[0], out int numRolls)) { numRolls = 1; }
-                    //int numRolls = int.Parse(d[0]);
-                    int faceNum = int.Parse(d[1]);
-                    int critRange;
-                    bool critsPossible = false;
-                    if (d.Length == 3) { critRange = int.Parse(d[2]); }
-                    else if (numRolls == 1 && faceNum == 20) { critRange = 19; }
-                    else { critRange = int.MaxValue; }
-
-                    (int roll, int critFlag) = DiceRoll(numRolls, faceNum, critRange);
-
-                    critsPossible = false;
-                    // Only track crits if a single d20 is being rolled, or whether cs>XX is specified
-                    if ((numRolls == 1 && faceNum == 20) | (critRange != int.MaxValue)) { critsPossible = true; }
-
-                    if (critsPossible && critFlag == 1) { globalCritFlag = 1; }
-                    else if (critsPossible && critFlag == -1) { globalCritFlag = -1; }
-                    outString = ReplaceFirst(outString, term, roll.ToString());
+                    if (addsOrSubs[i].Length > 0)
+                    {
+                        string lastLetter = addsOrSubs[i][^1].ToString();
+                        if (joinedMD.Contains(lastLetter)) { addsOrSubs[i] = addsOrSubs[i][..^1]; }
+                    }
                 }
 
+                foreach (string term in addsOrSubs)
+                {
+                    (string interimStr, int interimCritFlag) = RollParse(term, false);
+                    if (interimCritFlag == 1) { globalCritFlag = 1; }
+                    outString = ReplaceFirst(outString, term, interimStr);
+                }
             }
-            // [GeneratedRegex(@"[\[\]]")]
-            outString = RegexBrackets().Replace(outString, "");
+            else // Split on multiplication
+            {
+                string[] multsOrDivs = addsOrSubs[0].Split(delimitersMD, StringSplitOptions.None);
+                if (multsOrDivs.Length > 1)
+                {
+                    foreach (string term in multsOrDivs)
+                    {
+                        (string interimStr, int interimCritFlag) = RollParse(term, false);
+                        if (interimCritFlag == 1) { globalCritFlag = 1; }
+                        outString = ReplaceFirst(outString, term, interimStr);
+                    }
+                }
+                else
+                {
+                    int critRange;
+                    bool critsPossible;
+                    
+                    // Splits into XX d YY cs> ZZ
+                    // Length of 1 means constant, length of 2 means dice roll, length of 3 means diceroll with crit range
+                    string[] d = multsOrDivs[0].Split(rollDelimiters, StringSplitOptions.None);
+                    if (d.Length > 1)
+                    {
+                        if (!int.TryParse(d[0], out int numRolls)) { numRolls = 1; }
+                        //int numRolls = int.Parse(d[0]);
+                        int faceNum = int.Parse(d[1]);
+                        if (d.Length == 3) { critRange = int.Parse(d[2]); }
+                        else if (numRolls == 1 && faceNum == 20) { critRange = 19; }
+                        else { critRange = int.MaxValue; }
+                        (int roll, int critFlag) = DiceRoll(numRolls, faceNum, critRange);
+                        critsPossible = false;
+                        // Only track crits if a single d20 is being rolled, or whether cs>XX is specified
+                        if ((numRolls == 1 && faceNum == 20) | (critRange != int.MaxValue)) { critsPossible = true; }
+                        if (critsPossible && critFlag == 1) { globalCritFlag = 1; }
+                        else if (critsPossible && critFlag == -1) { globalCritFlag = -1; }
+                        outString = ReplaceFirst(outString, multsOrDivs[0], roll.ToString());
+                    }
+                }
+            }
 
-            int totalResult = (int)new DataTable().Compute(outString, null);
+            if (outString.Length == 0) { return (" ", globalCritFlag); }
 
-            return (totalResult.ToString(), globalCritFlag);
+
+            if (computeTerm)
+            {
+
+                //Debug.WriteLine($"Trying to compute {rollString} as {outString}");
+                int totalResult = Util.ComputeString(outString);
+                //Debug.WriteLine(totalResult);
+                return (totalResult.ToString(), globalCritFlag);
+            }
+            else
+            {
+                return (outString, globalCritFlag);
+            }
         }
 
         // Returns a list of strings with flags that comprise a rolled macro
@@ -128,23 +190,26 @@ namespace Pathfinder_1e_Assistant.Lib
         {
             List<string> stringList = [];
             List<int> rollFlags = [];
-            const int nonroll = 2;
+            
             int[][] bracketIdxs = BracketSearch(macro);
 
             if (bracketIdxs.Length == 0)
             {
-                return (new string[] { macro }, new int[] { nonroll });
+                return (new string[] { macro }, new int[] { nonRoll });
             }
 
             stringList.Add(macro[0..bracketIdxs[0][0]]);
-            rollFlags.Add(2);
+            rollFlags.Add(nonRoll);
 
             // Add rolls and nonroll strings to list
             for (int i = 0; i < bracketIdxs.Length; i++)
             {
                 int[] idxs = bracketIdxs[i];
                 string subStr = macro[idxs[0]..idxs[1]];
-                (string resultString, int critFlag) = RollParse(subStr);
+                subStr = RegexSquareBrackets().Replace(subStr,"");
+                //Debug.WriteLine($"Converting String: {subStr}");
+                (string resultString, int critFlag) = RollParse(subStr,true);
+                //Debug.WriteLine($"Converted String: {subStr} : {resultString}");
                 stringList.Add(resultString);
                 rollFlags.Add(critFlag);
 
@@ -155,20 +220,23 @@ namespace Pathfinder_1e_Assistant.Lib
                     string strBetween = macro[idxs[1]..bracketIdxs[i + 1][0]];
 
                     stringList.Add(strBetween);
-                    rollFlags.Add(2);
+                    rollFlags.Add(nonRoll);
                 }
             }
             stringList.Add(macro[bracketIdxs[^1][1]..macro.Length]);
-            rollFlags.Add(2);
+            rollFlags.Add(nonRoll);
 
             Console.WriteLine(stringList);
             return (stringList.ToArray(), rollFlags.ToArray());
         }
 
-        [GeneratedRegex("[^(cs>)0-9d+-]")]
+        [GeneratedRegex(@"[^(cs>)0-9d+-/*%]")]
         private static partial Regex RegexDiceParse();
 
         [GeneratedRegex(@"[\[\]]")]
+        private static partial Regex RegexSquareBrackets();
+
+        [GeneratedRegex(@"\(.*\)")]
         private static partial Regex RegexBrackets();
     }
 }

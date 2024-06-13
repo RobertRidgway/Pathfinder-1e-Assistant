@@ -17,7 +17,7 @@ namespace Pathfinder_1e_Assistant
 
         public string StatusMessage { get; set; } = string.Empty;
 
-        private SQLiteConnection conn;
+        private SQLiteConnection conn = null!;
 
         private void Init()
         {

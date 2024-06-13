@@ -6,7 +6,7 @@ namespace Pathfinder_1e_Assistant
     public partial class App : Application
     {
 
-        public static CharactersRepo CharRepo { get; private set; }
+        public static CharactersRepo CharRepo { get; private set; } = null!;
 
         public App(CharactersRepo repo)
         {
