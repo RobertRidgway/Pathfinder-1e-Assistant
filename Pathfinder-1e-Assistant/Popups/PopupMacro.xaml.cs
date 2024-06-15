@@ -19,8 +19,6 @@ public partial class PopupMacro : Popup
 	{
 		InitializeComponent();
 
-
-
 		FormattedString formattedString = new();
 
 		for (int i = 0; i < macroSnippets.Length; i++)
@@ -60,6 +58,5 @@ public partial class PopupMacro : Popup
             Content = new Label { FormattedText = formattedString, BackgroundColor = bgLabelColor }
         };
 		MacroControl.Children.Add(frame);
-		//BindingContext = this;
 	}
 }
