@@ -13,7 +13,7 @@ namespace Pathfinder_1e_Assistant.Lib
     {
         public const string CharacterRepoFilename = "characters.db3";
 
-        public static string CharactersRepoPath = 
+        public static readonly string CharactersRepoPath = 
             Path.Combine(FileSystem.AppDataDirectory, CharacterRepoFilename);
 
         public const SQLite.SQLiteOpenFlags Flags = SQLite.SQLiteOpenFlags.ReadWrite | 
@@ -22,7 +22,7 @@ namespace Pathfinder_1e_Assistant.Lib
 
         public const string MacrosRepoFilename = "macros.db3";
         
-        public static string MacrosRepoPath =
+        public static readonly string MacrosRepoPath =
             Path.Combine(FileSystem.AppDataDirectory, MacrosRepoFilename);
 
     }
